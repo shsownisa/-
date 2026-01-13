@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Molar | مولر</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0; padding: 0; width: 100%; min-height: 100vh;
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(120deg, #002bff, #00c3ff, #7f00ff, #00bfff);
+            background-size: 400% 400%;
+            animation: bgMove 8s ease infinite;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-molar {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+        }
+
+        .btn-action {
+            background: white;
+            color: #002bff;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transition: 0.3s;
+        }
+        .btn-action:active { transform: scale(0.96); }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 22px;
+            padding: 15px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="w-full max-w-[420px] mx-auto px-6 pt-0 pb-10 flex flex-col min-h-screen">
+        
+        <header class="w-full flex items-center justify-between pt-4 mb-10" data-aos="fade-down">
+            <div class="flex flex-col text-right">
+                <h1 class="text-4xl font-black tracking-tighter leading-none">Molar</h1>
+                <p class="text-xs font-bold opacity-70 tracking-widest uppercase mt-1">Dental App</p>
+            </div>
+            <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/20">
+                <span class="text-3xl">🦷</span>
+            </div>
+        </header>
+
+        <section class="w-full glass-molar p-8 text-center mb-6" data-aos="fade-up">
+            <h2 class="text-xl font-bold mb-3">مرحباً بك في تطبيق مولر</h2>
+            <p class="text-white/80 text-xs leading-relaxed mb-8">
+                تطبيقك المتكامل لتحميل محاضرات كلية طب الأسنان. خفيف، سريع، ومنظم بالكامل لكل المراحل الدراسية.
+            </p>
+            
+            <a href="https://apk.e-droid.net/apk/app3857300-tcs15r.apk?v=5" 
+               class="btn-action w-full">
+                تحميل التطبيق الآن
+            </a>
+        </section>
+
+        <section class="grid grid-cols-2 gap-4 mb-10" data-aos="fade-up" data-aos-delay="200">
+            <div class="info-box">
+                <span class="text-2xl mb-1">📚</span>
+                <span class="text-xs font-bold">كل المحاضرات</span>
+                <span class="text-[9px] opacity-60 mt-1 uppercase">Stage 1 to 5</span>
+            </div>
+            <div class="info-box">
+                <span class="text-2xl mb-1">⚡</span>
+                <span class="text-xs font-bold">سريع</span>
+                <span class="text-[9px] opacity-60 mt-1 uppercase">Direct Download</span>
+            </div>
+            <div class="info-box">
+                <span class="text-2xl mb-1">🔍</span>
+                <span class="text-xs font-bold">بحث ذكي</span>
+                <span class="text-[9px] opacity-60 mt-1 uppercase">Find in Seconds</span>
+            </div>
+            <div class="info-box">
+                <span class="text-2xl mb-1">✨</span>
+                <span class="text-xs font-bold">خفيف جداً</span>
+                <span class="text-[9px] opacity-60 mt-1 uppercase">Low Storage</span>
+            </div>
+        </section>
+
+        <footer class="mt-auto text-center py-6 border-t border-white/10 w-full">
+            <p class="text-white/40 text-[10px] font-bold tracking-[0.3em] uppercase mb-1">Designed for Students</p>
+            <p class="text-white/60 text-xs italic">Molar App © 2026</p>
+        </footer>
+
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-in-out'
+        });
+    </script>
+</body>
+</html>
