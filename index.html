@@ -3,181 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سامي عبدالله زيدان - تواصل معي</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>بث مباشر - ABOUD TV</title>
+    
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --bg-color: #3b1c8d; /* اللون البنفسجي المطابق للصورة */
-            --card-color: #ffb356; /* اللون البرتقالي للأزرار */
-            --text-color: #ffffff;
-            --accent-color: #f7d07a; /* لون الاسم الذهبي */
-        }
-
         body {
+            background-color: #0d0d0d;
+            background-image: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            color: white;
+            font-family: 'Cairo', sans-serif;
             margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: var(--text-color);
-            overflow: hidden;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            animation: fadeIn 1s ease-out;
-        }
-
-        /* صورة الملف الشخصي */
-        .profile-img {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 4px solid var(--accent-color);
-            margin-bottom: 15px;
-            object-fit: cover;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            animation: bounceIn 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .name {
-            color: var(--accent-color);
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .job-title {
-            font-size: 18px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            color: #d1c4e9;
-        }
-
-        /* أيقونات التواصل السريع */
-        .social-icons {
-            margin-bottom: 35px;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .social-icons a {
-            color: var(--accent-color);
-            font-size: 38px;
-            text-decoration: none;
-            transition: 0.3s;
-            display: inline-block;
-        }
-
-        .social-icons a:hover {
-            transform: translateY(-8px) scale(1.1);
-            filter: brightness(1.2);
-        }
-
-        .contact-me {
-            margin-bottom: 25px;
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        /* روابط الأزرار */
-        .links-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            padding-top: 50px;
+            min-height: 100vh;
         }
 
-        .link-card {
-            background-color: var(--card-color);
-            color: #2c166d;
-            padding: 18px 25px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 19px;
+        /* الإطار العلوي النيون */
+        .neon-title {
+            border: 2px solid #00f2ff;
+            border-radius: 15px;
+            padding: 12px 60px;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
+            margin-bottom: 50px;
+        }
+
+        .neon-title h1 {
+            margin: 0;
+            font-size: 30px;
+            color: #ffd700;
+            text-shadow: 0 0 10px #ffd700;
+            font-weight: 900;
+        }
+
+        /* منطقة المباراة */
+        .match-area {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideUp 0.8s ease-out forwards;
-            opacity: 0;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            gap: 50px;
+            margin-bottom: 30px;
         }
 
-        .link-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        .vs-glow {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 60px;
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
         }
 
-        .link-card i {
-            font-size: 30px;
+        .team-name { font-size: 35px; font-weight: 900; }
+
+        /* حاوية الفيديو الضخمة */
+        .video-container {
+            position: relative;
+            width: 85%;
+            max-width: 900px;
+            padding: 15px;
+            background: #2a2a2a;
+            border: 5px solid #444;
+            border-radius: 25px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.9);
         }
 
-        /* الحركات Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* زوايا النيون الزرقاء */
+        .corner {
+            position: absolute;
+            width: 50px; height: 50px;
+            border: 4px solid #00f2ff;
+            filter: drop-shadow(0 0 8px #00f2ff);
+        }
+        .top-left { top: -8px; left: -8px; border-right: 0; border-bottom: 0; border-radius: 20px 0 0 0; }
+        .bottom-right { bottom: -8px; right: -8px; border-left: 0; border-top: 0; border-radius: 0 0 20px 0; }
+
+        .video-js {
+            width: 100% !important;
+            height: auto;
+            aspect-ratio: 16/9;
+            border-radius: 15px;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* عداد المشاهدات الاحترافي */
+        .stats-footer {
+            width: 85%;
+            max-width: 900px;
+            margin-top: 40px;
+            text-align: right;
         }
 
-        @keyframes bounceIn {
-            0% { transform: scale(0); opacity: 0; }
-            60% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); }
+        .live-tag {
+            background: #ff0000;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            float: left;
+            animation: flash 1s infinite;
         }
 
-        /* توقيت ظهور الأزرار */
-        .link-card:nth-child(1) { animation-delay: 0.5s; }
-        .link-card:nth-child(2) { animation-delay: 0.8s; }
+        .main-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 85px;
+            color: #ff3333;
+            text-shadow: 0 0 20px #ff3333;
+            line-height: 1;
+            margin: 15px 0;
+        }
 
+        .secondary-stats {
+            color: #888;
+            font-size: 22px;
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+        }
+
+        @keyframes flash { 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="https://files.catbox.moe/83xtbw.jpg" alt="سامي عبدالله زيدان" class="profile-img">
+    <div class="neon-title">
+        <h1>★ ABOUD معوم : عيخار المملتعد:</h1>
+    </div>
+
+    <div class="match-area">
+        <div class="team-name">REAL</div>
+        <div class="vs-glow">VS</div>
+        <div class="team-name" style="color: #ff3333;">BENFICA</div>
+    </div>
+
+    <div class="video-container">
+        <div class="corner top-left"></div>
+        <div class="corner bottom-right"></div>
         
-        <div class="name"> عبدالله زيدان</div>
-        <div class="job-title">محترف برمجيات</div>
+        <video id="player" class="video-js vjs-big-play-centered" controls preload="auto">
+            <source src="http://chywjk30.chatdidi.com/live/508483_.m3u8?session=DJ0ujI2DwPijs4oU_ZZIudkkJYTbo--I44hB-JpibGVDO8oiqEk9ZwJOOgu-odjkR_c7FZD9HbKAFX4I4X7Yq-Wtf7Yy5xzV&location=local" type="application/x-mpegURL">
+        </video>
+    </div>
 
-        <div class="social-icons">
-            <a href="https://t.me/zczt0" target="_blank" title="تليجرام"><i class="fab fa-telegram"></i></a>
-            <a href="https://www.facebook.com/share/1Gc1V5WubN/" target="_blank" title="فيسبوك"><i class="fab fa-facebook"></i></a>
-        </div>
-
-        <div class="contact-me">
-            تواصل معي 👇
-        </div>
-
-        <div class="links-container">
-            <a href="https://t.me/zczt0" class="link-card" target="_blank">
-                <i class="fab fa-telegram"></i>
-                <span>تليجرام</span>
-                <i class="fas fa-chevron-left" style="font-size: 14px; opacity: 0.5;"></i>
-            </a>
-
-            <a href="https://www.facebook.com/share/1Gc1V5WubN/" class="link-card" target="_blank">
-                <i class="fab fa-facebook"></i>
-                <span>فيسبوك</span>
-                <i class="fas fa-chevron-left" style="font-size: 14px; opacity: 0.5;"></i>
-            </a>
+    <div class="stats-footer">
+        <div class="live-tag">▶ LIVE</div>
+        <div style="font-size: 20px; color: #aaa;">غددد الماتلياسوصي شلاد :</div>
+        <div class="main-number" id="big-count">33,255</div>
+        <div class="secondary-stats">
+            <span style="color: #ff4444;" id="s1">22,987</span>
+            <span id="s2">32,500</span>
+            <span id="s3">33,688</span>
         </div>
     </div>
 
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+    <script>
+        // سكربت التغيير العشوائي المستمر
+        function updateNumbers() {
+            // الرقم الكبير الأساسي يتغير بين 33100 و 33900
+            let main = Math.floor(Math.random() * (33900 - 33100 + 1)) + 33100;
+            document.getElementById('big-count').innerText = main.toLocaleString();
+
+            // الأرقام الفرعية تتغير أيضاً لزيادة التمويه
+            document.getElementById('s1').innerText = (Math.floor(Math.random() * 500) + 22500).toLocaleString();
+            document.getElementById('s2').innerText = (Math.floor(Math.random() * 500) + 32100).toLocaleString();
+            document.getElementById('s3').innerText = (Math.floor(Math.random() * 500) + 33500).toLocaleString();
+        }
+
+        // التحديث كل ثانية ونصف ليكون التغيير "هواية" كما طلبت
+        setInterval(updateNumbers, 1500);
+
+        var player = videojs('player');
+    </script>
 </body>
 </html>
