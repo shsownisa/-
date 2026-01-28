@@ -3,177 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بث مباشر - ABOUD TV</title>
-    
-    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
-    
+    <title>بث مباشر | ريال مدريد ضد بنفيكا</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #00e676;
+            --bg-dark: #0a0b10;
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
         body {
-            background-color: #0d0d0d;
-            background-image: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
             color: white;
             font-family: 'Cairo', sans-serif;
-            margin: 0;
+            background: radial-gradient(circle at top, #1a1c2c 0%, #0a0b10 100%);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 50px;
-            min-height: 100vh;
         }
 
-        /* الإطار العلوي النيون */
-        .neon-title {
-            border: 2px solid #00f2ff;
-            border-radius: 15px;
-            padding: 12px 60px;
-            background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
-            margin-bottom: 50px;
+        /* الهيدر والمباريات */
+        .match-container {
+            width: 90%;
+            max-width: 900px;
+            margin-top: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .neon-title h1 {
-            margin: 0;
-            font-size: 30px;
-            color: #ffd700;
-            text-shadow: 0 0 10px #ffd700;
-            font-weight: 900;
-        }
-
-        /* منطقة المباراة */
-        .match-area {
+        .teams-flex {
             display: flex;
+            justify-content: space-around;
             align-items: center;
-            gap: 50px;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
 
-        .vs-glow {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 60px;
-            color: #ffd700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
-        }
+        .team-box img { width: 70px; height: 70px; object-fit: contain; }
+        .vs { font-size: 2rem; font-weight: 900; color: var(--primary-color); text-shadow: 0 0 10px var(--primary-color); }
 
-        .team-name { font-size: 35px; font-weight: 900; }
-
-        /* حاوية الفيديو الضخمة */
-        .video-container {
-            position: relative;
-            width: 85%;
-            max-width: 900px;
-            padding: 15px;
-            background: #2a2a2a;
-            border: 5px solid #444;
-            border-radius: 25px;
-            box-shadow: 0 0 60px rgba(0,0,0,0.9);
-        }
-
-        /* زوايا النيون الزرقاء */
-        .corner {
-            position: absolute;
-            width: 50px; height: 50px;
-            border: 4px solid #00f2ff;
-            filter: drop-shadow(0 0 8px #00f2ff);
-        }
-        .top-left { top: -8px; left: -8px; border-right: 0; border-bottom: 0; border-radius: 20px 0 0 0; }
-        .bottom-right { bottom: -8px; right: -8px; border-left: 0; border-top: 0; border-radius: 0 0 20px 0; }
-
-        .video-js {
-            width: 100% !important;
-            height: auto;
-            aspect-ratio: 16/9;
-            border-radius: 15px;
-        }
-
-        /* عداد المشاهدات الاحترافي */
-        .stats-footer {
-            width: 85%;
-            max-width: 900px;
-            margin-top: 40px;
-            text-align: right;
-        }
-
-        .live-tag {
-            background: #ff0000;
-            color: white;
+        /* المشاهدات الوهمية */
+        .live-counter {
+            background: rgba(255, 0, 0, 0.8);
             padding: 5px 15px;
-            border-radius: 5px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+        /* المشغل */
+        .video-wrapper {
+            width: 100%;
+            max-width: 850px;
+            aspect-ratio: 16/9;
+            background: black;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #333;
+            position: relative;
+        }
+
+        video { width: 100%; height: 100%; outline: none; }
+
+        /* الحقوق */
+        .footer-rights {
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.6);
+        }
+        .footer-rights span { color: var(--primary-color); font-weight: bold; }
+
+        .btn-refresh {
+            background: var(--primary-color);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            color: black;
             font-weight: bold;
-            float: left;
-            animation: flash 1s infinite;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
         }
-
-        .main-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 85px;
-            color: #ff3333;
-            text-shadow: 0 0 20px #ff3333;
-            line-height: 1;
-            margin: 15px 0;
-        }
-
-        .secondary-stats {
-            color: #888;
-            font-size: 22px;
-            display: flex;
-            gap: 20px;
-            justify-content: flex-end;
-        }
-
-        @keyframes flash { 50% { opacity: 0.4; } }
+        .btn-refresh:hover { transform: scale(1.05); opacity: 0.9; }
     </style>
 </head>
 <body>
 
-    <div class="neon-title">
-        <h1>★ ABOUD معوم : عيخار المملتعد:</h1>
-    </div>
-
-    <div class="match-area">
-        <div class="team-name">REAL</div>
-        <div class="vs-glow">VS</div>
-        <div class="team-name" style="color: #ff3333;">BENFICA</div>
-    </div>
-
-    <div class="video-container">
-        <div class="corner top-left"></div>
-        <div class="corner bottom-right"></div>
-        
-        <video id="player" class="video-js vjs-big-play-centered" controls preload="auto">
-            <source src="http://chywjk30.chatdidi.com/live/508483_.m3u8?session=DJ0ujI2DwPijs4oU_ZZIudkkJYTbo--I44hB-JpibGVDO8oiqEk9ZwJOOgu-odjkR_c7FZD9HbKAFX4I4X7Yq-Wtf7Yy5xzV&location=local" type="application/x-mpegURL">
-        </video>
-    </div>
-
-    <div class="stats-footer">
-        <div class="live-tag">▶ LIVE</div>
-        <div style="font-size: 20px; color: #aaa;">غددد الماتلياسوصي شلاد :</div>
-        <div class="main-number" id="big-count">33,255</div>
-        <div class="secondary-stats">
-            <span style="color: #ff4444;" id="s1">22,987</span>
-            <span id="s2">32,500</span>
-            <span id="s3">33,688</span>
+    <div class="match-container">
+        <div class="live-counter">
+            <span id="dot" style="height:8px; width:8px; background:white; border-radius:50%"></span>
+            مباشر الآن: <span id="viewer-count">22,863</span>
         </div>
+
+        <div class="teams-flex">
+            <div class="team-box">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/1200px-Real_Madrid_CF.svg.png" alt="ريال مدريد">
+                <h3>ريال مدريد</h3>
+            </div>
+            <div class="vs">VS</div>
+            <div class="team-box">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Logo_S.L._Benfica.svg/1200px-Logo_S.L._Benfica.svg.png" alt="بنفيكا">
+                <h3>بنفيكا</h3>
+            </div>
+        </div>
+
+        <div class="video-wrapper">
+            <video id="video" controls autoplay playsinline></video>
+        </div>
+
+        <button class="btn-refresh" onclick="location.reload()">تحديث البث</button>
     </div>
 
-    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
-    <script>
-        // سكربت التغيير العشوائي المستمر
-        function updateNumbers() {
-            // الرقم الكبير الأساسي يتغير بين 33100 و 33900
-            let main = Math.floor(Math.random() * (33900 - 33100 + 1)) + 33100;
-            document.getElementById('big-count').innerText = main.toLocaleString();
+    <div class="footer-rights">
+        جميع الحقوق محفوظة © 2026 | تصميم <span>عبدالله زيدان</span>
+    </div>
 
-            // الأرقام الفرعية تتغير أيضاً لزيادة التمويه
-            document.getElementById('s1').innerText = (Math.floor(Math.random() * 500) + 22500).toLocaleString();
-            document.getElementById('s2').innerText = (Math.floor(Math.random() * 500) + 32100).toLocaleString();
-            document.getElementById('s3').innerText = (Math.floor(Math.random() * 500) + 33500).toLocaleString();
+    <script>
+        // كود تشغيل الفيديو m3u8
+        var video = document.getElementById('video');
+        var videoSrc = 'http://chywjk30.chatdidi.com/live/508483_.m3u8?session=DJ0ujI2DwPijs4oU_ZZIudkkJYTbo--I44hB-JpibGVDO8oiqEk9ZwJOOgu-odjkR_c7FZD9HbKAFX4I4X7Yq-Wtf7Yy5xzV&location=local';
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
         }
 
-        // التحديث كل ثانية ونصف ليكون التغيير "هواية" كما طلبت
-        setInterval(updateNumbers, 1500);
+        // كود العداد الوهمي المطور
+        let currentViewers = 22863;
+        const countElement = document.getElementById('viewer-count');
 
-        var player = videojs('player');
+        function updateViewers() {
+            // إضافة أو طرح رقم عشوائي بين 1 و 50 لجعله يبدو حقيقياً
+            let change = Math.floor(Math.random() * 100) - 45; 
+            currentViewers += change;
+
+            // الحفاظ على الحدود المطلوبة
+            if (currentViewers < 22000) currentViewers += 200;
+            if (currentViewers > 30000) currentViewers -= 200;
+
+            // تنسيق الرقم بالفواصل (مثل 22,863)
+            countElement.innerText = currentViewers.toLocaleString('en-US');
+
+            // تغيير وقت التحديث بشكل عشوائي كل مرة (بين ثانية و 3 ثواني) لكسر الرتابة
+            setTimeout(updateViewers, Math.random() * (3000 - 1000) + 1000);
+        }
+
+        updateViewers();
     </script>
 </body>
 </html>
