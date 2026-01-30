@@ -3,178 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>دولاب الحظ الذكي 🎡</title>
+    <title>قناص الثنائيات 🎯</title>
     <style>
-        /* إعدادات الواجهة الثابتة */
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: #000;
+            color: #fff;
             margin: 0;
-            padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
             height: 100vh;
-            overflow: hidden; /* يمنع الحركة يميناً ويساراً */
-            color: #333;
+            overflow: hidden;
         }
 
-        .app-container {
+        .container {
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            height: 100%;
         }
 
-        header { text-align: center; margin-bottom: 15px; }
-        h1 { margin: 10px 0; color: #1e3799; font-size: 24px; }
+        h1 { color: #00ffcc; text-shadow: 0 0 10px #00ffcc; font-size: 22px; }
 
-        /* منطقة السؤال */
-        .input-group {
-            width: 100%;
-            margin-bottom: 20px;
+        .status-bar {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
         }
+
         input#questionInput {
             width: 100%;
             padding: 15px;
-            border: 2px solid #1e3799;
-            border-radius: 12px;
-            font-size: 16px;
+            background: #111;
+            border: 2px solid #222;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 18px;
             text-align: center;
+            margin-bottom: 30px;
             outline: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        /* حاوية الدولاب */
-        .wheel-wrapper {
-            position: relative;
-            width: 320px;
-            height: 320px;
-            margin: auto;
-        }
-
-        /* سهم المؤشر */
-        .pointer {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid #eb2f06;
-            z-index: 10;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-        }
-
-        canvas {
+        .slots-box {
+            display: flex;
+            align-items: center;
             width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 6px solid #fff;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1);
+            gap: 10px;
+            margin-bottom: 40px;
         }
 
-        /* الزر */
+        .name-slot {
+            flex: 1;
+            height: 110px;
+            background: #111;
+            border: 2px dashed #333;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-weight: bold;
+            font-size: 19px;
+            padding: 10px;
+            color: #00ffcc;
+        }
+
+        .vs {
+            background: #ff3e3e;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 0 15px #ff3e3e;
+        }
+
         #spinBtn {
             width: 100%;
-            padding: 15px;
-            margin-top: 25px;
+            padding: 20px;
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            border-radius: 50px;
             font-size: 20px;
             font-weight: bold;
-            color: white;
-            background: linear-gradient(135deg, #1e3799, #4a69bd);
-            border: none;
-            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(30, 55, 153, 0.3);
-            transition: 0.2s;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
         }
-        #spinBtn:active { transform: scale(0.98); }
-        #spinBtn:disabled { background: #95a5a6; }
 
-        /* نافذة النتيجة (الرسالة الحلوة) */
-        #resultModal {
+        #spinBtn:disabled { background: #333; color: #666; box-shadow: none; }
+
+        /* Modal */
+        #modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.95);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 20px;
         }
         .modal-card {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid #00ffcc;
             text-align: center;
-            width: 100%;
+            width: 85%;
             max-width: 350px;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        @keyframes popIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .modal-card h2 { color: #1e3799; margin-top: 0; }
-        .modal-card .q-text { color: #666; font-style: italic; margin-bottom: 10px; }
-        .modal-card .winner-name { 
-            font-size: 28px; 
-            font-weight: bold; 
-            color: #eb2f06; 
-            margin: 15px 0;
-            padding: 10px;
-            background: #fff5f5;
-            border-radius: 10px;
-        }
-        .close-btn {
-            background: #1e3799;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
+        .winner-text { font-size: 28px; font-weight: bold; color: #fff; margin: 20px 0; }
+        .q-final { color: #00ffcc; font-size: 18px; }
+        .reset-link { color: #ff3e3e; margin-top: 20px; cursor: pointer; text-decoration: underline; display: block; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <header>
-        <h1>🎡 دولاب الأسماء</h1>
-    </header>
+<div class="container">
+    <h1>🎯 قناص الثنائيات</h1>
+    <div class="status-bar" id="status">الطلاب المتبقين: 33</div>
 
-    <div class="input-group">
-        <input type="text" id="questionInput" placeholder="اكتب السؤال هنا..." value="">
+    <input type="text" id="questionInput" placeholder="أكثر اثنين شنو؟" value="">
+
+    <div class="slots-box">
+        <div class="name-slot" id="s1">؟</div>
+        <div class="vs">و</div>
+        <div class="name-slot" id="s2">؟</div>
     </div>
 
-    <div class="wheel-wrapper">
-        <div class="pointer"></div>
-        <canvas id="wheelCanvas" width="800" height="800"></canvas>
-    </div>
-
-    <button id="spinBtn">تدوير الدولاب ✨</button>
+    <button id="spinBtn" onclick="pickDuo()">كشف الثنائي 🚀</button>
 </div>
 
-<div id="resultModal">
+<div id="modal">
     <div class="modal-card">
-        <h2>🎉 وقع الاختيار!</h2>
-        <p class="q-text" id="resQuestion"></p>
-        <div class="winner-name" id="resName">اسم الطالب</div>
-        <button class="close-btn" onclick="closeModal()">ممتاز 👍</button>
+        <div class="q-final" id="modalQ"></div>
+        <div class="winner-text" id="modalWinners"></div>
+        <button onclick="closeModal()" style="padding: 10px 30px; border-radius: 10px; border:none; background:#00ffcc; font-weight:bold;">تم القصف 😂</button>
+        <span class="reset-link" onclick="resetPool()">إعادة تصفير القائمة</span>
     </div>
 </div>
 
 <script>
-    const names = [
+    let originalNames = [
         "بهاء علاء جبار", "بتول علي غازي", "بدور سعد علي", "مريم علي عبد المجيد",
         "بنين جواد كاظم", "بنين علاء عاشور", "بيداء علي جاسب", "تبارك علي",
         "تبارك عماد عمار", "تبارك نجم عبد", "تقى احمد جواد", "تقى طه عبد الحميد",
@@ -186,76 +161,63 @@
         "سارة فلاح مجيد", "طيبة خالد"
     ];
 
-    const colors = ['#1e3799', '#4a69bd', '#079992', '#e67e22', '#82ccdd', '#60a3bc', '#b8e994', '#f8c291'];
-    
-    const canvas = document.getElementById('wheelCanvas');
-    const ctx = canvas.getContext('2d');
-    const spinBtn = document.getElementById('spinBtn');
-    const modal = document.getElementById('resultModal');
+    let pool = [...originalNames];
 
-    let currentRotation = 0;
-    const slices = names.length;
-    const arc = Math.PI / (slices / 2);
-
-    function draw() {
-        ctx.clearRect(0,0,800,800);
-        for (let i = 0; i < slices; i++) {
-            const angle = i * arc;
-            ctx.beginPath();
-            ctx.fillStyle = colors[i % colors.length];
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            ctx.moveTo(400, 400);
-            ctx.arc(400, 400, 380, angle, angle + arc);
-            ctx.lineTo(400, 400);
-            ctx.fill();
-            ctx.stroke();
-
-            // إضافة الأسماء
-            ctx.save();
-            ctx.translate(400, 400);
-            ctx.rotate(angle + arc / 2);
-            ctx.textAlign = "right";
-            ctx.fillStyle = "white";
-            ctx.font = "bold 18px Arial";
-            ctx.fillText(names[i], 360, 10);
-            ctx.restore();
+    function updateStatus() {
+        document.getElementById('status').innerText = `الطلاب المتبقين في القرعة: ${pool.length}`;
+        if (pool.length < 2) {
+            document.getElementById('spinBtn').innerText = "انتهى الطلاب! (صفر القائمة)";
         }
     }
 
-    draw();
+    function pickDuo() {
+        const q = document.getElementById('questionInput').value;
+        if (pool.length < 2) return alert("خلصوا الطلاب! اضغط إعادة تصفير القائمة.");
 
-    spinBtn.addEventListener('click', () => {
-        const question = document.getElementById('questionInput').value;
-        if (!question) { alert("اكتب سؤال أولاً!"); return; }
+        const btn = document.getElementById('spinBtn');
+        btn.disabled = true;
 
-        spinBtn.disabled = true;
-        // زيادة الدوران بشكل عشوائي كبير لضمان العشوائية 100%
-        const rotation = Math.floor(Math.random() * 360) + (360 * 8); 
-        currentRotation += rotation;
-        
-        canvas.style.transform = `rotate(${currentRotation}deg)`;
+        // خلط القائمة بعشوائية 100% (Fisher-Yates)
+        for (let i = pool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
 
-        setTimeout(() => {
-            spinBtn.disabled = false;
-            // حساب الفائز بناءً على الزاوية النهائية
-            const actualRotation = currentRotation % 360;
-            const segmentAngle = 360 / slices;
-            const winnerIndex = Math.floor((360 - actualRotation) / segmentAngle) % slices;
-            
-            showResult(question, names[winnerIndex]);
-        }, 5000);
-    });
-
-    function showResult(q, name) {
-        document.getElementById('resQuestion').innerText = "بخصوص: " + q;
-        document.getElementById('resName').innerText = name;
-        modal.style.display = 'flex';
+        let counter = 0;
+        const anim = setInterval(() => {
+            document.getElementById('s1').innerText = originalNames[Math.floor(Math.random() * originalNames.length)];
+            document.getElementById('s2').innerText = originalNames[Math.floor(Math.random() * originalNames.length)];
+            counter++;
+            if (counter > 30) {
+                clearInterval(anim);
+                // سحب آخر اسمين من القائمة المخلطة (لضمان عدم التكرار)
+                const w1 = pool.pop();
+                const w2 = pool.pop();
+                
+                document.getElementById('s1').innerText = w1;
+                document.getElementById('s2').innerText = w2;
+                
+                setTimeout(() => {
+                    document.getElementById('modalQ').innerText = "أكثر اثنين " + q;
+                    document.getElementById('modalWinners').innerText = w1 + " و " + w2;
+                    document.getElementById('modal').style.display = 'flex';
+                    btn.disabled = false;
+                    updateStatus();
+                }, 500);
+            }
+        }, 60);
     }
 
-    function closeModal() {
-        modal.style.display = 'none';
+    function resetPool() {
+        pool = [...originalNames];
+        updateStatus();
+        document.getElementById('spinBtn').innerText = "كشف الثنائي 🚀";
+        closeModal();
+        alert("تم إعادة الجميع للقرعة!");
     }
+
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    updateStatus();
 </script>
 
 </body>
