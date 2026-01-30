@@ -2,91 +2,261 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بث مباشر | ريال مدريد vs بنفيكا</title>
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>دولاب الحظ الذكي 🎡</title>
     <style>
-        :root { --primary: #00ff88; --bg: #050505; }
-        body { background: var(--bg); color: white; font-family: 'Cairo', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        
-        .main-card { width: 95%; max-width: 1000px; margin-top: 20px; background: rgba(255,255,255,0.03); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        
-        /* عداد المشاهدات الاحترافي */
-        .live-status { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .badge { background: #ff0000; padding: 4px 12px; border-radius: 5px; font-weight: bold; font-size: 14px; animation: blink 1s infinite; }
-        .viewers-count { font-size: 18px; color: var(--primary); font-weight: 900; }
-        @keyframes blink { 50% { opacity: 0.6; } }
+        /* إعدادات الواجهة الثابتة */
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* يمنع الحركة يميناً ويساراً */
+            color: #333;
+        }
 
-        /* حاوية الفيديو */
-        .video-container { width: 100%; border-radius: 15px; overflow: hidden; border: 3px solid #1a1a1a; position: relative; }
-        
-        /* الحقوق */
-        .footer { margin-top: 25px; text-align: center; font-size: 1.2rem; opacity: 0.8; }
-        .footer b { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100%;
+        }
 
-        .team-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px; }
-        .team-info img { width: 60px; height: 60px; }
+        header { text-align: center; margin-bottom: 15px; }
+        h1 { margin: 10px 0; color: #1e3799; font-size: 24px; }
+
+        /* منطقة السؤال */
+        .input-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        input#questionInput {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #1e3799;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        /* حاوية الدولاب */
+        .wheel-wrapper {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: auto;
+        }
+
+        /* سهم المؤشر */
+        .pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #eb2f06;
+            z-index: 10;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 6px solid #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1);
+        }
+
+        /* الزر */
+        #spinBtn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #1e3799, #4a69bd);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(30, 55, 153, 0.3);
+            transition: 0.2s;
+        }
+        #spinBtn:active { transform: scale(0.98); }
+        #spinBtn:disabled { background: #95a5a6; }
+
+        /* نافذة النتيجة (الرسالة الحلوة) */
+        #resultModal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 350px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-card h2 { color: #1e3799; margin-top: 0; }
+        .modal-card .q-text { color: #666; font-style: italic; margin-bottom: 10px; }
+        .modal-card .winner-name { 
+            font-size: 28px; 
+            font-weight: bold; 
+            color: #eb2f06; 
+            margin: 15px 0;
+            padding: 10px;
+            background: #fff5f5;
+            border-radius: 10px;
+        }
+        .close-btn {
+            background: #1e3799;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <div class="main-card">
-        <div class="live-status">
-            <div class="badge">LIVE</div>
-            <div class="viewers-count">عدد المشاهدين: <span id="counter">22,863</span></div>
-        </div>
+<div class="app-container">
+    <header>
+        <h1>🎡 دولاب الأسماء</h1>
+    </header>
 
-        <div class="team-info">
-            <div style="text-align: center;">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/1200px-Real_Madrid_CF.svg.png">
-                <div>ريال مدريد</div>
-            </div>
-            <div style="font-size: 30px; font-weight: 900; color: var(--primary);">VS</div>
-            <div style="text-align: center;">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Logo_S.L._Benfica.svg/1200px-Logo_S.L._Benfica.svg.png">
-                <div>بنفيكا</div>
-            </div>
-        </div>
-
-        <div class="video-container">
-            <video id="player" playsinline controls></video>
-        </div>
+    <div class="input-group">
+        <input type="text" id="questionInput" placeholder="اكتب السؤال هنا..." value="">
     </div>
 
-    <div class="footer">
-        تصميم وحقوق البث محفوظة للمبدع: <b>عبدالله زيدان</b>
+    <div class="wheel-wrapper">
+        <div class="pointer"></div>
+        <canvas id="wheelCanvas" width="800" height="800"></canvas>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    <button id="spinBtn">تدوير الدولاب ✨</button>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('player');
-            const source = 'http://chywjk30.chatdidi.com/live/508483_.m3u8?session=DJ0ujI2DwPijs4oU_ZZIudkkJYTbo--I44hB-JpibGVDO8oiqEk9ZwJOOgu-odjkR_c7FZD9HbKAFX4I4X7Yq-Wtf7Yy5xzV&location=local';
+<div id="resultModal">
+    <div class="modal-card">
+        <h2>🎉 وقع الاختيار!</h2>
+        <p class="q-text" id="resQuestion"></p>
+        <div class="winner-name" id="resName">اسم الطالب</div>
+        <button class="close-btn" onclick="closeModal()">ممتاز 👍</button>
+    </div>
+</div>
+
+<script>
+    const names = [
+        "بهاء علاء جبار", "بتول علي غازي", "بدور سعد علي", "مريم علي عبد المجيد",
+        "بنين جواد كاظم", "بنين علاء عاشور", "بيداء علي جاسب", "تبارك علي",
+        "تبارك عماد عمار", "تبارك نجم عبد", "تقى احمد جواد", "تقى طه عبد الحميد",
+        "تيسير سراج منير", "جاسم جواد كاظم", "جعفر براهيم عواد", "جمانه قصي براهيم",
+        "جنات عامر سهيل", "حسن اسماعيل عبد", "حسن سامي شلش", "حسين جاسم سعدون",
+        "حسين زياد نوماس", "حسين محمد صادق", "حوراء جمال صادق", "طيبة هادي جواد",
+        "سجى محمد جبير", "بنين عادل سعيد", "رانيا عمار", "مريام احمد كطن",
+        "سعد عدنان عبدالله", "عبدالله عامر شيرين", "سفانة امجد عبدالعالي",
+        "سارة فلاح مجيد", "طيبة خالد"
+    ];
+
+    const colors = ['#1e3799', '#4a69bd', '#079992', '#e67e22', '#82ccdd', '#60a3bc', '#b8e994', '#f8c291'];
+    
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
+    const modal = document.getElementById('resultModal');
+
+    let currentRotation = 0;
+    const slices = names.length;
+    const arc = Math.PI / (slices / 2);
+
+    function draw() {
+        ctx.clearRect(0,0,800,800);
+        for (let i = 0; i < slices; i++) {
+            const angle = i * arc;
+            ctx.beginPath();
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.moveTo(400, 400);
+            ctx.arc(400, 400, 380, angle, angle + arc);
+            ctx.lineTo(400, 400);
+            ctx.fill();
+            ctx.stroke();
+
+            // إضافة الأسماء
+            ctx.save();
+            ctx.translate(400, 400);
+            ctx.rotate(angle + arc / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Arial";
+            ctx.fillText(names[i], 360, 10);
+            ctx.restore();
+        }
+    }
+
+    draw();
+
+    spinBtn.addEventListener('click', () => {
+        const question = document.getElementById('questionInput').value;
+        if (!question) { alert("اكتب سؤال أولاً!"); return; }
+
+        spinBtn.disabled = true;
+        // زيادة الدوران بشكل عشوائي كبير لضمان العشوائية 100%
+        const rotation = Math.floor(Math.random() * 360) + (360 * 8); 
+        currentRotation += rotation;
+        
+        canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+        setTimeout(() => {
+            spinBtn.disabled = false;
+            // حساب الفائز بناءً على الزاوية النهائية
+            const actualRotation = currentRotation % 360;
+            const segmentAngle = 360 / slices;
+            const winnerIndex = Math.floor((360 - actualRotation) / segmentAngle) % slices;
             
-            // تهيئة مشغل HLS
-            const hls = new Hls();
-            hls.loadSource(source);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                const player = new Plyr(video, {
-                    title: 'بث عبدالله زيدان',
-                    quality: { default: 720, options: [720, 480, 360] }
-                });
-            });
+            showResult(question, names[winnerIndex]);
+        }, 5000);
+    });
 
-            // عداد المشاهدات الوهمي السريع
-            let count = 22863;
-            setInterval(() => {
-                let change = Math.floor(Math.random() * 150) - 70; // تغيير سريع وغير متوقع
-                count += change;
-                if(count < 22000) count += 500;
-                if(count > 30000) count -= 500;
-                document.getElementById('counter').innerText = count.toLocaleString();
-            }, 1500); // يتغير كل ثانية ونصف
-        });
-    </script>
+    function showResult(q, name) {
+        document.getElementById('resQuestion').innerText = "بخصوص: " + q;
+        document.getElementById('resName').innerText = name;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+</script>
+
 </body>
 </html>
