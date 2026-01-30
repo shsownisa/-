@@ -3,153 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>قناص الثنائيات 🎯</title>
+    <title>نظام كشف الكذب الاحترافي 🔍</title>
     <style>
+        :root {
+            --neon-green: #00ff9f;
+            --neon-red: #ff0055;
+            --dark-bg: #0d1117;
+            --card-bg: #161b22;
+        }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-color: #000;
-            color: #fff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: #ffffff;
             margin: 0;
             display: flex;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             overflow: hidden;
         }
 
-        .container {
+        .app-container {
             width: 100%;
             max-width: 400px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 { color: #00ffcc; text-shadow: 0 0 10px #00ffcc; font-size: 22px; }
-
-        .status-bar {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 10px;
-        }
-
-        input#questionInput {
-            width: 100%;
-            padding: 15px;
-            background: #111;
-            border: 2px solid #222;
-            border-radius: 15px;
-            color: #fff;
-            font-size: 18px;
+            background: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid #30363d;
             text-align: center;
-            margin-bottom: 30px;
-            outline: none;
         }
 
-        .slots-box {
-            display: flex;
-            align-items: center;
+        h1 {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: var(--neon-green);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        select {
             width: 100%;
-            gap: 10px;
-            margin-bottom: 40px;
+            padding: 12px;
+            background: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            color: #c9d1d9;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
         }
 
-        .name-slot {
-            flex: 1;
-            height: 110px;
-            background: #111;
-            border: 2px dashed #333;
+        /* منطقة البصمة */
+        .scanner-wrapper {
+            position: relative;
+            width: 160px;
+            height: 200px;
+            margin: 0 auto 20px;
+            background: #0d1117;
+            border: 2px solid #30363d;
             border-radius: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            font-weight: bold;
-            font-size: 19px;
-            padding: 10px;
-            color: #00ffcc;
+            overflow: hidden;
+            transition: 0.3s;
         }
 
-        .vs {
-            background: #ff3e3e;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            box-shadow: 0 0 15px #ff3e3e;
+        .scanner-wrapper.active {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 159, 0.2);
         }
 
-        #spinBtn {
+        .fingerprint-icon {
+            font-size: 80px;
+            opacity: 0.2;
+            transition: 0.3s;
+        }
+
+        .active .fingerprint-icon {
+            opacity: 0.8;
+            filter: drop-shadow(0 0 10px var(--neon-green));
+        }
+
+        /* خط المسح النيوني */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 20px;
-            background: #00ffcc;
-            color: #000;
-            border: none;
-            border-radius: 50px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
-        }
-
-        #spinBtn:disabled { background: #333; color: #666; box-shadow: none; }
-
-        /* Modal */
-        #modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            height: 3px;
+            background: var(--neon-green);
+            box-shadow: 0 0 15px var(--neon-green);
             display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            z-index: 10;
         }
-        .modal-card {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 30px;
-            border: 1px solid #00ffcc;
-            text-align: center;
-            width: 85%;
-            max-width: 350px;
+
+        .scanning .scan-line {
+            display: block;
+            animation: scanAnim 1.5s infinite ease-in-out;
         }
-        .winner-text { font-size: 28px; font-weight: bold; color: #fff; margin: 20px 0; }
-        .q-final { color: #00ffcc; font-size: 18px; }
-        .reset-link { color: #ff3e3e; margin-top: 20px; cursor: pointer; text-decoration: underline; display: block; }
+
+        @keyframes scanAnim {
+            0% { top: 5%; }
+            50% { top: 90%; }
+            100% { top: 5%; }
+        }
+
+        .status-msg {
+            height: 20px;
+            font-size: 14px;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        /* النتيجة */
+        .result-display {
+            font-size: 32px;
+            font-weight: 800;
+            padding: 15px;
+            border-radius: 15px;
+            display: none;
+            animation: resultPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes resultPop {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .truth { color: var(--neon-green); border: 2px solid var(--neon-green); background: rgba(0, 255, 159, 0.05); }
+        .lie { color: var(--neon-red); border: 2px solid var(--neon-red); background: rgba(255, 0, 85, 0.05); }
+
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🎯 قناص الثنائيات</h1>
-    <div class="status-bar" id="status">الطلاب المتبقين: 33</div>
+<div class="app-container">
+    <h1>DETECTIVE AI • نظام الكشف</h1>
 
-    <input type="text" id="questionInput" placeholder="أكثر اثنين شنو؟" value="">
-
-    <div class="slots-box">
-        <div class="name-slot" id="s1">؟</div>
-        <div class="vs">و</div>
-        <div class="name-slot" id="s2">؟</div>
+    <div class="input-group">
+        <select id="studentName">
+            <option value="">اختر اسم الطالب فحص...</option>
+            </select>
     </div>
 
-    <button id="spinBtn" onclick="pickDuo()">كشف الثنائي 🚀</button>
-</div>
-
-<div id="modal">
-    <div class="modal-card">
-        <div class="q-final" id="modalQ"></div>
-        <div class="winner-text" id="modalWinners"></div>
-        <button onclick="closeModal()" style="padding: 10px 30px; border-radius: 10px; border:none; background:#00ffcc; font-weight:bold;">تم القصف 😂</button>
-        <span class="reset-link" onclick="resetPool()">إعادة تصفير القائمة</span>
+    <div class="scanner-wrapper" id="scanner">
+        <div class="scan-line"></div>
+        <div class="fingerprint-icon">☝️</div>
     </div>
+
+    <div class="status-msg" id="status">جاهز لتحليل البيانات...</div>
+
+    <div id="resultBox" class="result-display"></div>
 </div>
 
 <script>
-    let originalNames = [
+    const students = [
         "بهاء علاء جبار", "بتول علي غازي", "بدور سعد علي", "مريم علي عبد المجيد",
         "بنين جواد كاظم", "بنين علاء عاشور", "بيداء علي جاسب", "تبارك علي",
         "تبارك عماد عمار", "تبارك نجم عبد", "تقى احمد جواد", "تقى طه عبد الحميد",
@@ -161,63 +178,68 @@
         "سارة فلاح مجيد", "طيبة خالد"
     ];
 
-    let pool = [...originalNames];
+    const select = document.getElementById('studentName');
+    const scanner = document.getElementById('scanner');
+    const status = document.getElementById('status');
+    const resultBox = document.getElementById('resultBox');
 
-    function updateStatus() {
-        document.getElementById('status').innerText = `الطلاب المتبقين في القرعة: ${pool.length}`;
-        if (pool.length < 2) {
-            document.getElementById('spinBtn').innerText = "انتهى الطلاب! (صفر القائمة)";
+    // تعبئة الأسماء
+    students.forEach(name => {
+        let opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        select.appendChild(opt);
+    });
+
+    let holdTimer;
+
+    // أحداث اللمس والضغط
+    const startAction = (e) => {
+        e.preventDefault();
+        if(!select.value) {
+            status.innerText = "❌ يرجى اختيار اسم أولاً!";
+            status.style.color = "#ff4444";
+            return;
+        }
+
+        resultBox.style.display = 'none';
+        scanner.classList.add('active', 'scanning');
+        status.innerText = "جاري تحليل الموجات الحيوية...";
+        status.style.color = "#8b949e";
+
+        holdTimer = setTimeout(() => {
+            finishScan();
+        }, 2500);
+    };
+
+    const stopAction = () => {
+        clearTimeout(holdTimer);
+        if(!resultBox.style.display || resultBox.style.display === 'none') {
+            scanner.classList.remove('active', 'scanning');
+            status.innerText = "⚠️ فشل الفحص! استمر بالضغط";
+        }
+    };
+
+    scanner.addEventListener('mousedown', startAction);
+    scanner.addEventListener('touchstart', startAction);
+    window.addEventListener('mouseup', stopAction);
+    window.addEventListener('touchend', stopAction);
+
+    function finishScan() {
+        scanner.classList.remove('scanning');
+        const isTruth = Math.random() > 0.5; // عشوائية 100%
+        
+        resultBox.style.display = 'block';
+        if(isTruth) {
+            resultBox.innerText = "صـادق ✅";
+            resultBox.className = "result-display truth";
+            status.innerText = "تم التحقق من صدق: " + select.value;
+        } else {
+            resultBox.innerText = "كـاذب ❌";
+            resultBox.className = "result-display lie";
+            status.innerText = "كشف محاولة تضليل من: " + select.value;
         }
     }
-
-    function pickDuo() {
-        const q = document.getElementById('questionInput').value;
-        if (pool.length < 2) return alert("خلصوا الطلاب! اضغط إعادة تصفير القائمة.");
-
-        const btn = document.getElementById('spinBtn');
-        btn.disabled = true;
-
-        // خلط القائمة بعشوائية 100% (Fisher-Yates)
-        for (let i = pool.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [pool[i], pool[j]] = [pool[j], pool[i]];
-        }
-
-        let counter = 0;
-        const anim = setInterval(() => {
-            document.getElementById('s1').innerText = originalNames[Math.floor(Math.random() * originalNames.length)];
-            document.getElementById('s2').innerText = originalNames[Math.floor(Math.random() * originalNames.length)];
-            counter++;
-            if (counter > 30) {
-                clearInterval(anim);
-                // سحب آخر اسمين من القائمة المخلطة (لضمان عدم التكرار)
-                const w1 = pool.pop();
-                const w2 = pool.pop();
-                
-                document.getElementById('s1').innerText = w1;
-                document.getElementById('s2').innerText = w2;
-                
-                setTimeout(() => {
-                    document.getElementById('modalQ').innerText = "أكثر اثنين " + q;
-                    document.getElementById('modalWinners').innerText = w1 + " و " + w2;
-                    document.getElementById('modal').style.display = 'flex';
-                    btn.disabled = false;
-                    updateStatus();
-                }, 500);
-            }
-        }, 60);
-    }
-
-    function resetPool() {
-        pool = [...originalNames];
-        updateStatus();
-        document.getElementById('spinBtn').innerText = "كشف الثنائي 🚀";
-        closeModal();
-        alert("تم إعادة الجميع للقرعة!");
-    }
-
-    function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    updateStatus();
 </script>
 
 </body>
